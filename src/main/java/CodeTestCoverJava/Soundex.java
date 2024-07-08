@@ -5,27 +5,18 @@ import java.util.Map;
 
 public class Soundex {
 
-    private static final Map<Character, Character> soundexMap = new HashMap<>();
-    
-    static {
-        soundexMap.put('B', '1');
-        soundexMap.put('F', '1');
-        soundexMap.put('P', '1');
-        soundexMap.put('V', '1');
-        soundexMap.put('C', '2');
-        soundexMap.put('G', '2');
-        soundexMap.put('J', '2');
-        soundexMap.put('K', '2');
-        soundexMap.put('Q', '2');
-        soundexMap.put('S', '2');
-        soundexMap.put('X', '2');
-        soundexMap.put('Z', '2');
-        soundexMap.put('D', '3');
-        soundexMap.put('T', '3');
-        soundexMap.put('L', '4');
-        soundexMap.put('M', '5');
-        soundexMap.put('N', '5');
-        soundexMap.put('R', '6');
+    private static final Map<Character, Character> soundexMap = createSoundexMap();
+
+    private static Map<Character, Character> createSoundexMap() {
+        Map<Character, Character> map = new HashMap<>();
+        map.put('B', '1'); map.put('F', '1'); map.put('P', '1'); map.put('V', '1');
+        map.put('C', '2'); map.put('G', '2'); map.put('J', '2'); map.put('K', '2');
+        map.put('Q', '2'); map.put('S', '2'); map.put('X', '2'); map.put('Z', '2');
+        map.put('D', '3'); map.put('T', '3');
+        map.put('L', '4');
+        map.put('M', '5'); map.put('N', '5');
+        map.put('R', '6');
+        return map;
     }
 
     public static String generateSoundex(String name) {
@@ -34,9 +25,16 @@ public class Soundex {
         }
 
         StringBuilder soundex = new StringBuilder();
-        soundex.append(Character.toUpperCase(name.charAt(0)));
-        char prevCode = getSoundexCode(name.charAt(0));
+        char firstChar = Character.toUpperCase(name.charAt(0));
+        soundex.append(firstChar);
+        processRemainingCharacters(name, soundex);
 
+        padSoundexCode(soundex);
+        return soundex.toString();
+    }
+
+    private static void processRemainingCharacters(String name, StringBuilder soundex) {
+        char prevCode = getSoundexCode(name.charAt(0));
         for (int i = 1; i < name.length() && soundex.length() < 4; i++) {
             char code = getSoundexCode(name.charAt(i));
             if (code != '0' && code != prevCode) {
@@ -44,12 +42,12 @@ public class Soundex {
                 prevCode = code;
             }
         }
+    }
 
+    private static void padSoundexCode(StringBuilder soundex) {
         while (soundex.length() < 4) {
             soundex.append('0');
         }
-
-        return soundex.toString();
     }
 
     private static char getSoundexCode(char c) {
@@ -67,6 +65,10 @@ public class Soundex {
         assert generateSoundex("Ashcraft").equals("A261");
         assert generateSoundex("Pfister").equals("P236");
         assert generateSoundex("Honeyman").equals("H555");
+        assert generateSoundex("Bartosz").equals("B620");
+        assert generateSoundex("Bartoz").equals("B620");
+        assert generateSoundex("Ashcraft").equals(generateSoundex("ashcraft"));
         System.out.println("All tests passed");
     }
 }
+
