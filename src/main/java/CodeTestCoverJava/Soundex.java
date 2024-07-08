@@ -45,4 +45,17 @@ public class Soundex {
                 return '0'; // For A, E, I, O, U, H, W, Y
         }
     }
+
+    public static void main(String[] args) {
+        runTests();
+    }
+
+    private static void runTests() {
+        assert generateSoundex("").equals("");
+        assert generateSoundex("A").equals("A000");
+        assert generateSoundex("Ashcraft").equals("A261");
+        assert generateSoundex("Pfister").equals("P236");
+        assert generateSoundex("Honeyman").equals("H555");
+        System.out.println("All tests passed");
+    }
 }
