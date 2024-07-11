@@ -68,6 +68,10 @@ public class Soundex {
         assert generateSoundex("Bartosz").equals("B620");
         assert generateSoundex("Bartoz").equals("B620");
         assert generateSoundex("Ashcraft").equals(generateSoundex("ashcraft"));
+        assert generateSoundex("Robert").equals("R163");
+        assert generateSoundex("Rupert").equals("R163");
+        assert generateSoundex("Rubin").equals("R150");
+        assert generateSoundex("Ashcraft").equals("A261");
         System.out.println("All tests passed");
     }
 }
