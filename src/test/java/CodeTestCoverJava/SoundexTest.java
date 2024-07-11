@@ -32,4 +32,25 @@ public class SoundexTest {
     public void testCaseInsensitivity() {
         assertEquals(Soundex.generateSoundex("Ashcraft"), Soundex.generateSoundex("ashcraft"));
     }
+
+    @Test
+    public void testNamesWithSpecialCharacters() {
+        assertEquals("R163", Soundex.generateSoundex("Robert!"));
+        assertEquals("R163", Soundex.generateSoundex("Rupert#"));
+        assertEquals("R150", Soundex.generateSoundex("Rubin$"));
+    }
+
+    @Test
+    public void testNamesWithHyphensOrSpaces() {
+        assertEquals("L300", Soundex.generateSoundex("Lloyd-Wright"));
+        assertEquals("M620", Soundex.generateSoundex("Mary Jane"));
+    }
+
+    @Test
+    public void testAdditionalNames() {
+        assertEquals("R163", Soundex.generateSoundex("Robert"));
+        assertEquals("R163", Soundex.generateSoundex("Rupert"));
+        assertEquals("R150", Soundex.generateSoundex("Rubin"));
+        assertEquals("A261", Soundex.generateSoundex("Ashcraft"));
+    }
 }
