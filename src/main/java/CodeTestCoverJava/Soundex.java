@@ -37,20 +37,16 @@ public class Soundex {
         char prevCode = getSoundexCode(name.charAt(0));
         for (int i = 1; i < name.length() && soundex.length() < 4; i++) {
             char currentChar = name.charAt(i);
-            char code = getSoundexCode(currentChar);
-            if (shouldAppendSoundexCode(code, prevCode)) {
-                appendSoundexCode(soundex, code);
-                prevCode = code;
-            }
+            appendIfValid(soundex, currentChar, prevCode);
+            prevCode = getSoundexCode(currentChar);
         }
     }
 
-    private static void appendSoundexCode(StringBuilder soundex, char code) {
-        soundex.append(code);
-    }
-
-    private static boolean shouldAppendSoundexCode(char code, char prevCode) {
-        return code != '0' && code != prevCode;
+    private static void appendIfValid(StringBuilder soundex, char currentChar, char prevCode) {
+        char code = getSoundexCode(currentChar);
+        if (code != '0' && code != prevCode) {
+            soundex.append(code);
+        }
     }
 
     private static void padSoundexCode(StringBuilder soundex) {
@@ -94,4 +90,3 @@ public class Soundex {
         System.out.println("All tests passed");
     }
 }
-
