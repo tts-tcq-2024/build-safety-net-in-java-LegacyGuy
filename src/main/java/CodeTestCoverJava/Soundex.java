@@ -36,12 +36,21 @@ public class Soundex {
     private static void processRemainingCharacters(String name, StringBuilder soundex) {
         char prevCode = getSoundexCode(name.charAt(0));
         for (int i = 1; i < name.length() && soundex.length() < 4; i++) {
-            char code = getSoundexCode(name.charAt(i));
-            if (code != '0' && code != prevCode) {
-                soundex.append(code);
+            char currentChar = name.charAt(i);
+            char code = getSoundexCode(currentChar);
+            if (shouldAppendSoundexCode(code, prevCode)) {
+                appendSoundexCode(soundex, code);
                 prevCode = code;
             }
         }
+    }
+
+    private static void appendSoundexCode(StringBuilder soundex, char code) {
+        soundex.append(code);
+    }
+
+    private static boolean shouldAppendSoundexCode(char code, char prevCode) {
+        return code != '0' && code != prevCode;
     }
 
     private static void padSoundexCode(StringBuilder soundex) {
@@ -72,6 +81,16 @@ public class Soundex {
         assert generateSoundex("Rupert").equals("R163");
         assert generateSoundex("Rubin").equals("R150");
         assert generateSoundex("Ashcraft").equals("A261");
+        assert generateSoundex("Tymczak").equals("T522");
+        assert generateSoundex("Pfister").equals("P236");
+        assert generateSoundex("Jackson").equals("J250");
+        assert generateSoundex("Tymczak").equals("T522");
+        assert generateSoundex("Euler").equals("E460");
+        assert generateSoundex("Gauss").equals("G020");
+        assert generateSoundex("Hilbert").equals("H416");
+        assert generateSoundex("Knuth").equals("K530");
+        assert generateSoundex("Lloyd").equals("L300");
+        assert generateSoundex("Lukasiewicz").equals("L220");
         System.out.println("All tests passed");
     }
 }
