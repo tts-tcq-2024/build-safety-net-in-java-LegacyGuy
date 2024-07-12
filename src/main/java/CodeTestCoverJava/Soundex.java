@@ -36,14 +36,18 @@ public class Soundex {
 
         for (int i = 1; i < name.length() && soundex.length() < 4; i++) {
             char currentChar = name.charAt(i);
-            char code = getSoundexCode(currentChar);
-            if (shouldAppendCode(code, prevCode)) {
-                soundex.append(code);
-                prevCode = code;
-            }
+            appendIfValid(soundex, currentChar, prevCode);
+            prevCode = getSoundexCode(currentChar);
         }
 
         return soundex.toString();
+    }
+
+    private static void appendIfValid(StringBuilder soundex, char currentChar, char prevCode) {
+        char code = getSoundexCode(currentChar);
+        if (shouldAppendCode(code, prevCode)) {
+            soundex.append(code);
+        }
     }
 
     private static boolean shouldAppendCode(char code, char prevCode) {
@@ -84,6 +88,12 @@ public class Soundex {
         assert generateSoundex("Pfister").equals("P236");
         assert generateSoundex("Jackson").equals("J250");
         assert generateSoundex("Tymczak").equals("T522");
+        assert generateSoundex("Euler").equals("E460");
+        assert generateSoundex("Gauss").equals("G020");
+        assert generateSoundex("Hilbert").equals("H416");
+        assert generateSoundex("Knuth").equals("K530");
+        assert generateSoundex("Lloyd").equals("L300");
+        assert generateSoundex("Lukasiewicz").equals("L220");
         System.out.println("All tests passed");
     }
 }
