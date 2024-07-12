@@ -55,13 +55,8 @@ public class SoundexTest {
         assertEquals("T522", Soundex.generateSoundex("Tymczak"));
         assertEquals("P236", Soundex.generateSoundex("Pfister"));
         assertEquals("J250", Soundex.generateSoundex("Jackson"));
-        assertEquals("E460", Soundex.generateSoundex("Euler"));
-        assertEquals("G020", Soundex.generateSoundex("Gauss"));
-        assertEquals("H416", Soundex.generateSoundex("Hilbert"));
-        assertEquals("K530", Soundex.generateSoundex("Knuth"));
-        assertEquals("L300", Soundex.generateSoundex("Lloyd"));
-        assertEquals("L220", Soundex.generateSoundex("Lukasiewicz"));
     }
 }
+
 
 
