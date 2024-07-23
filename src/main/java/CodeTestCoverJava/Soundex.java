@@ -51,7 +51,7 @@ public class Soundex {
             if (soundex.length() == 4) {
                 break;
             }
-            prevCode = getSoundexCode(currentChar);
+            prevCode = updatePrevCode(currentChar, prevCode);
         }
     }
 
@@ -64,6 +64,11 @@ public class Soundex {
 
     private static boolean isCodeValidToAppend(char currentCode, char prevCode) {
         return currentCode != '0' && currentCode != prevCode;
+    }
+
+    private static char updatePrevCode(char currentChar, char prevCode) {
+        char currentCode = getSoundexCode(currentChar);
+        return (currentCode != '0') ? currentCode : prevCode;
     }
 
     private static String padSoundexCode(String soundex) {
