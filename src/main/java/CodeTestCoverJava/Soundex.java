@@ -46,17 +46,17 @@ public class Soundex {
 
     private static void generateSoundexForRemainingChars(String name, StringBuilder soundex, char prevCode) {
         for (int i = 1; i < name.length() && soundex.length() < 4; i++) {
-            char currentChar = name.charAt(i);
-            processCharacter(soundex, currentChar, prevCode);
-            if (soundex.length() == 4) {
-                break;
-            }
-            prevCode = updatePrevCode(currentChar, prevCode);
+            processCharacter(soundex, name.charAt(i), prevCode);
+            prevCode = updatePrevCode(name.charAt(i), prevCode);
         }
     }
 
     private static void processCharacter(StringBuilder soundex, char currentChar, char prevCode) {
         char currentCode = getSoundexCode(currentChar);
+        appendCodeIfValid(soundex, currentCode, prevCode);
+    }
+
+    private static void appendCodeIfValid(StringBuilder soundex, char currentCode, char prevCode) {
         if (isCodeValidToAppend(currentCode, prevCode)) {
             soundex.append(currentCode);
         }
@@ -68,7 +68,7 @@ public class Soundex {
 
     private static char updatePrevCode(char currentChar, char prevCode) {
         char currentCode = getSoundexCode(currentChar);
-        return (currentCode != '0') ? currentCode : prevCode;
+        return currentCode != '0' ? currentCode : prevCode;
     }
 
     private static String padSoundexCode(String soundex) {
