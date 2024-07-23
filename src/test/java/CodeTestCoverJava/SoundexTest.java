@@ -63,4 +63,3 @@ public class SoundexTest {
         assertEquals("L220", Soundex.generateSoundex("Lukasiewicz"));
     }
 }
-
