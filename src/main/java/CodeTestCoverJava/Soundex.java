@@ -47,13 +47,17 @@ public class Soundex {
     private static void generateSoundexForRemainingChars(String name, StringBuilder soundex, char prevCode) {
         for (int i = 1; i < name.length() && soundex.length() < 4; i++) {
             char currentChar = name.charAt(i);
-            char currentCode = getSoundexCode(currentChar);
-            appendCodeIfValid(soundex, currentCode, prevCode);
+            processCharacter(soundex, currentChar, prevCode);
             if (soundex.length() == 4) {
                 break;
             }
-            prevCode = currentCode;
+            prevCode = getSoundexCode(currentChar);
         }
+    }
+
+    private static void processCharacter(StringBuilder soundex, char currentChar, char prevCode) {
+        char currentCode = getSoundexCode(currentChar);
+        appendCodeIfValid(soundex, currentCode, prevCode);
     }
 
     private static void appendCodeIfValid(StringBuilder soundex, char currentCode, char prevCode) {
