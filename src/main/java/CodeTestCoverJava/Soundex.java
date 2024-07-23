@@ -24,13 +24,18 @@ public class Soundex {
             return "";
         }
 
-        String soundex = generateInitialSoundex(name);
+        String cleanedName = cleanName(name);
+        String soundex = generateInitialSoundex(cleanedName);
         return padSoundexCode(soundex);
+    }
+
+    private static String cleanName(String name) {
+        return name.replaceAll("[^a-zA-Z]", "").toUpperCase();
     }
 
     private static String generateInitialSoundex(String name) {
         StringBuilder soundex = new StringBuilder();
-        char firstChar = Character.toUpperCase(name.charAt(0));
+        char firstChar = name.charAt(0);
         soundex.append(firstChar);
         char prevCode = getSoundexCode(firstChar);
 
@@ -63,7 +68,6 @@ public class Soundex {
     }
 
     private static char getSoundexCode(char c) {
-        c = Character.toUpperCase(c);
         return soundexMap.getOrDefault(c, '0');
     }
 
