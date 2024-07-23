@@ -41,22 +41,17 @@ public class Soundex {
 
         for (int i = 1; i < name.length() && soundex.length() < 4; i++) {
             char currentChar = name.charAt(i);
-            appendIfValid(soundex, currentChar, prevCode);
-            prevCode = getSoundexCode(currentChar);
+            char currentCode = getSoundexCode(currentChar);
+            if (currentCode != '0' && currentCode != prevCode) {
+                soundex.append(currentCode);
+                if (soundex.length() == 4) {  // Ensuring length after first character is <= 3
+                    break;
+                }
+                prevCode = currentCode;
+            }
         }
 
         return soundex.toString();
-    }
-
-    private static void appendIfValid(StringBuilder soundex, char currentChar, char prevCode) {
-        char code = getSoundexCode(currentChar);
-        if (shouldAppendCode(code, prevCode)) {
-            soundex.append(code);
-        }
-    }
-
-    private static boolean shouldAppendCode(char code, char prevCode) {
-        return code != '0' && code != prevCode;
     }
 
     private static String padSoundexCode(String soundex) {
