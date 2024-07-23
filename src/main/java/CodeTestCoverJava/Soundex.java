@@ -57,13 +57,13 @@ public class Soundex {
 
     private static void processCharacter(StringBuilder soundex, char currentChar, char prevCode) {
         char currentCode = getSoundexCode(currentChar);
-        appendCodeIfValid(soundex, currentCode, prevCode);
-    }
-
-    private static void appendCodeIfValid(StringBuilder soundex, char currentCode, char prevCode) {
-        if (currentCode != '0' && currentCode != prevCode) {
+        if (isCodeValidToAppend(currentCode, prevCode)) {
             soundex.append(currentCode);
         }
+    }
+
+    private static boolean isCodeValidToAppend(char currentCode, char prevCode) {
+        return currentCode != '0' && currentCode != prevCode;
     }
 
     private static String padSoundexCode(String soundex) {
