@@ -39,19 +39,27 @@ public class Soundex {
         soundex.append(firstChar);
         char prevCode = getSoundexCode(firstChar);
 
+        generateSoundexForRemainingChars(name, soundex, prevCode);
+
+        return soundex.toString();
+    }
+
+    private static void generateSoundexForRemainingChars(String name, StringBuilder soundex, char prevCode) {
         for (int i = 1; i < name.length() && soundex.length() < 4; i++) {
             char currentChar = name.charAt(i);
             char currentCode = getSoundexCode(currentChar);
-            if (currentCode != '0' && currentCode != prevCode) {
-                soundex.append(currentCode);
-                if (soundex.length() == 4) {  // Ensuring length after first character is <= 3
-                    break;
-                }
-                prevCode = currentCode;
+            appendCodeIfValid(soundex, currentCode, prevCode);
+            if (soundex.length() == 4) {
+                break;
             }
+            prevCode = currentCode;
         }
+    }
 
-        return soundex.toString();
+    private static void appendCodeIfValid(StringBuilder soundex, char currentCode, char prevCode) {
+        if (currentCode != '0' && currentCode != prevCode) {
+            soundex.append(currentCode);
+        }
     }
 
     private static String padSoundexCode(String soundex) {
