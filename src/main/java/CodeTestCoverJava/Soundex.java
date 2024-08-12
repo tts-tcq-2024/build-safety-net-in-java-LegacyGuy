@@ -5,29 +5,27 @@ import java.util.Map;
 
 public class Soundex {
 
-    private static final Map<Character, Character> soundexMapping = initSoundexMapping();
+    private static final Map<Character, Character> CHAR_TO_DIGIT_MAP = new HashMap<>();
 
-    private static Map<Character, Character> initSoundexMapping() {
-        Map<Character, Character> map = new HashMap<>();
-        map.put('B', '1');
-        map.put('F', '1');
-        map.put('P', '1');
-        map.put('V', '1');
-        map.put('C', '2');
-        map.put('G', '2');
-        map.put('J', '2');
-        map.put('K', '2');
-        map.put('Q', '2');
-        map.put('S', '2');
-        map.put('X', '2');
-        map.put('Z', '2');
-        map.put('D', '3');
-        map.put('T', '3');
-        map.put('L', '4');
-        map.put('M', '5');
-        map.put('N', '5');
-        map.put('R', '6');
-        return map;
+    static {
+        CHAR_TO_DIGIT_MAP.put('B', '1');
+        CHAR_TO_DIGIT_MAP.put('F', '1');
+        CHAR_TO_DIGIT_MAP.put('P', '1');
+        CHAR_TO_DIGIT_MAP.put('V', '1');
+        CHAR_TO_DIGIT_MAP.put('C', '2');
+        CHAR_TO_DIGIT_MAP.put('G', '2');
+        CHAR_TO_DIGIT_MAP.put('J', '2');
+        CHAR_TO_DIGIT_MAP.put('K', '2');
+        CHAR_TO_DIGIT_MAP.put('Q', '2');
+        CHAR_TO_DIGIT_MAP.put('S', '2');
+        CHAR_TO_DIGIT_MAP.put('X', '2');
+        CHAR_TO_DIGIT_MAP.put('Z', '2');
+        CHAR_TO_DIGIT_MAP.put('D', '3');
+        CHAR_TO_DIGIT_MAP.put('T', '3');
+        CHAR_TO_DIGIT_MAP.put('L', '4');
+        CHAR_TO_DIGIT_MAP.put('M', '5');
+        CHAR_TO_DIGIT_MAP.put('N', '5');
+        CHAR_TO_DIGIT_MAP.put('R', '6');
     }
 
     public static String generateSoundex(String name) {
@@ -35,27 +33,39 @@ public class Soundex {
             return "";
         }
 
-        StringBuilder soundex = new StringBuilder();
-        soundex.append(Character.toUpperCase(name.charAt(0)));
-        char prevCode = getSoundexCode(name.charAt(0));
+        String upperName = name.toUpperCase();
+        StringBuilder soundexCode = new StringBuilder();
+        soundexCode.append(upperName.charAt(0));
 
-        for (int i = 1; i < name.length() && soundex.length() < 4; i++) {
-            char code = getSoundexCode(name.charAt(i));
-            if (code != '0' && code != prevCode) {
-                soundex.append(code);
-                prevCode = code;
+        char prevDigit = getCharDigit(upperName.charAt(0));
+
+        for (int i = 1; i < upperName.length(); i++) {
+            char currentChar = upperName.charAt(i);
+            if (!Character.isLetter(currentChar)) {
+                continue;
+            }
+
+            char currentDigit = getCharDigit(currentChar);
+
+            if (currentDigit != '0' && currentDigit != prevDigit) {
+                soundexCode.append(currentDigit);
+            }
+
+            prevDigit = currentDigit;
+
+            if (soundexCode.length() == 4) {
+                break;
             }
         }
 
-        while (soundex.length() < 4) {
-            soundex.append('0');
+        while (soundexCode.length() < 4) {
+            soundexCode.append('0');
         }
 
-        return soundex.toString();
+        return soundexCode.toString();
     }
 
-    private static char getSoundexCode(char c) {
-        c = Character.toUpperCase(c);
-        return soundexMapping.getOrDefault(c, '0');
+    private static char getCharDigit(char c) {
+        return CHAR_TO_DIGIT_MAP.getOrDefault(c, '0');
     }
 }
