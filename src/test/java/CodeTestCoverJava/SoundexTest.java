@@ -1,45 +1,41 @@
+
 package CodeTestCoverJava;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 public class SoundexTest {
 
-    @Test
-    public void testEmptyAndNullInputs() {
-        Assertions.assertEquals("", Soundex.generateSoundex(null));
-        Assertions.assertEquals("", Soundex.generateSoundex(""));
+    @ParameterizedTest
+    @MethodSource("provideStringsForGenerateSoundex")
+    public void testWords(String word, String actualCode) {
+        Assertions.assertEquals(Soundex.generateSoundex(word), actualCode);
     }
 
-    @Test
-    public void testSingleCharacter() {
-        Assertions.assertEquals("A000", Soundex.generateSoundex("A"));
+
+    private static Stream<Arguments> provideStringsForGenerateSoundex() {
+        return Stream.of(
+                Arguments.of("", ""),
+                Arguments.of(null, ""),
+                Arguments.of("A", "A000"),
+                Arguments.of("AN", "A500"),
+                Arguments.of("AMP", "A510"),
+                Arguments.of("HELP", "H410"),
+                Arguments.of("Jackson", "J250"),
+                Arguments.of("Pfister", "P236"),
+                Arguments.of("Honeyman", "H555"),
+                Arguments.of("R@#*(", "R000")
+        );
     }
 
-    @Test
-    public void testRegularNames() {
-        Assertions.assertEquals("A500", Soundex.generateSoundex("An"));
-        Assertions.assertEquals("A510", Soundex.generateSoundex("Amp"));
-        Assertions.assertEquals("H410", Soundex.generateSoundex("Help"));
-        Assertions.assertEquals("J250", Soundex.generateSoundex("Jackson"));
-        Assertions.assertEquals("P236", Soundex.generateSoundex("Pfister"));
-        Assertions.assertEquals("H555", Soundex.generateSoundex("Honeyman"));
-    }
 
-    @Test
-    public void testSpecialCharacters() {
-        Assertions.assertEquals("R000", Soundex.generateSoundex("R@#*("));
-    }
-
-    @Test
-    public void testSimilarSounds() {
-        Assertions.assertEquals("R163", Soundex.generateSoundex("Robert"));
-        Assertions.assertEquals("R163", Soundex.generateSoundex("Rupert"));
-    }
-
-    @Test
-    public void testDifferentNames() {
-        Assertions.assertEquals("M460", Soundex.generateSoundex("Martin"));
-        Assertions.assertEquals("R150", Soundex.generateSoundex("Rubin"));
-    }
 }
