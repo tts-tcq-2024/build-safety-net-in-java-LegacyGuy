@@ -5,53 +5,64 @@ import java.util.Map;
 
 public class Soundex {
 
-    private static final Map<Character, Character> CHAR_TO_DIGIT_MAP = new HashMap<>();
+    private static final Map<Character, Character> CHAR_TO_DIGIT_MAP = createCharToDigitMap();
 
-    static {
-        CHAR_TO_DIGIT_MAP.put('B', '1');
-        CHAR_TO_DIGIT_MAP.put('F', '1');
-        CHAR_TO_DIGIT_MAP.put('P', '1');
-        CHAR_TO_DIGIT_MAP.put('V', '1');
-        CHAR_TO_DIGIT_MAP.put('C', '2');
-        CHAR_TO_DIGIT_MAP.put('G', '2');
-        CHAR_TO_DIGIT_MAP.put('J', '2');
-        CHAR_TO_DIGIT_MAP.put('K', '2');
-        CHAR_TO_DIGIT_MAP.put('Q', '2');
-        CHAR_TO_DIGIT_MAP.put('S', '2');
-        CHAR_TO_DIGIT_MAP.put('X', '2');
-        CHAR_TO_DIGIT_MAP.put('Z', '2');
-        CHAR_TO_DIGIT_MAP.put('D', '3');
-        CHAR_TO_DIGIT_MAP.put('T', '3');
-        CHAR_TO_DIGIT_MAP.put('L', '4');
-        CHAR_TO_DIGIT_MAP.put('M', '5');
-        CHAR_TO_DIGIT_MAP.put('N', '5');
-        CHAR_TO_DIGIT_MAP.put('R', '6');
+    private static Map<Character, Character> createCharToDigitMap() {
+        Map<Character, Character> map = new HashMap<>();
+        map.put('B', '1');
+        map.put('F', '1');
+        map.put('P', '1');
+        map.put('V', '1');
+        map.put('C', '2');
+        map.put('G', '2');
+        map.put('J', '2');
+        map.put('K', '2');
+        map.put('Q', '2');
+        map.put('S', '2');
+        map.put('X', '2');
+        map.put('Z', '2');
+        map.put('D', '3');
+        map.put('T', '3');
+        map.put('L', '4');
+        map.put('M', '5');
+        map.put('N', '5');
+        map.put('R', '6');
+        return map;
     }
 
     public static String generateSoundex(String name) {
-        if (name == null || name.isEmpty()) return "";
-        
-        String upperName = name.toUpperCase();
+        if (isInvalidName(name)) return "";
+
         StringBuilder soundexCode = new StringBuilder();
-        soundexCode.append(upperName.charAt(0));
+        char firstChar = name.toUpperCase().charAt(0);
+        soundexCode.append(firstChar);
 
-        char prevDigit = mapCharToDigit(upperName.charAt(0));
-
-        for (int i = 1; i < upperName.length(); i++) {
-            char currentChar = upperName.charAt(i);
-            if (!Character.isLetter(currentChar)) continue;
-
-            char currentDigit = mapCharToDigit(currentChar);
-            if (isValidSoundexCharacter(currentDigit, prevDigit)) {
-                soundexCode.append(currentDigit);
-            }
-
-            prevDigit = currentDigit;
-
-            if (soundexCode.length() == 4) break;
-        }
+        processRemainingChars(name, soundexCode);
 
         return padToFourCharacters(soundexCode).toString();
+    }
+
+    private static boolean isInvalidName(String name) {
+        return name == null || name.isEmpty();
+    }
+
+    private static void processRemainingChars(String name, StringBuilder soundexCode) {
+        char prevDigit = mapCharToDigit(name.toUpperCase().charAt(0));
+
+        for (int i = 1; i < name.length(); i++) {
+            char currentChar = name.toUpperCase().charAt(i);
+            if (Character.isLetter(currentChar)) {
+                char currentDigit = mapCharToDigit(currentChar);
+                appendIfValid(soundexCode, currentDigit, prevDigit);
+                prevDigit = currentDigit;
+            }
+        }
+    }
+
+    private static void appendIfValid(StringBuilder soundexCode, char currentDigit, char prevDigit) {
+        if (isValidSoundexCharacter(currentDigit, prevDigit) && soundexCode.length() < 4) {
+            soundexCode.append(currentDigit);
+        }
     }
 
     private static char mapCharToDigit(char c) {
