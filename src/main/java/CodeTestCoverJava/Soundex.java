@@ -29,43 +29,43 @@ public class Soundex {
     }
 
     public static String generateSoundex(String name) {
-        if (name == null || name.isEmpty()) {
-            return "";
-        }
-
+        if (name == null || name.isEmpty()) return "";
+        
         String upperName = name.toUpperCase();
         StringBuilder soundexCode = new StringBuilder();
         soundexCode.append(upperName.charAt(0));
 
-        char prevDigit = getCharDigit(upperName.charAt(0));
+        char prevDigit = mapCharToDigit(upperName.charAt(0));
 
         for (int i = 1; i < upperName.length(); i++) {
             char currentChar = upperName.charAt(i);
-            if (!Character.isLetter(currentChar)) {
-                continue;
-            }
+            if (!Character.isLetter(currentChar)) continue;
 
-            char currentDigit = getCharDigit(currentChar);
-
-            if (currentDigit != '0' && currentDigit != prevDigit) {
+            char currentDigit = mapCharToDigit(currentChar);
+            if (isValidSoundexCharacter(currentDigit, prevDigit)) {
                 soundexCode.append(currentDigit);
             }
 
             prevDigit = currentDigit;
 
-            if (soundexCode.length() == 4) {
-                break;
-            }
+            if (soundexCode.length() == 4) break;
         }
 
+        return padToFourCharacters(soundexCode).toString();
+    }
+
+    private static char mapCharToDigit(char c) {
+        return CHAR_TO_DIGIT_MAP.getOrDefault(c, '0');
+    }
+
+    private static boolean isValidSoundexCharacter(char currentDigit, char prevDigit) {
+        return currentDigit != '0' && currentDigit != prevDigit;
+    }
+
+    private static StringBuilder padToFourCharacters(StringBuilder soundexCode) {
         while (soundexCode.length() < 4) {
             soundexCode.append('0');
         }
-
-        return soundexCode.toString();
-    }
-
-    private static char getCharDigit(char c) {
-        return CHAR_TO_DIGIT_MAP.getOrDefault(c, '0');
+        return soundexCode;
     }
 }
